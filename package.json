@@ -1,0 +1,44 @@
+{
+    "name": "clidle",
+    "version": "1.0.0",
+    "description": "game goes here",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/iobg/CLIdle.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/iobg/CLIdle/issues"
+    },
+    "homepage": "https://github.com/iobg/CLIdle#readme",
+    "dependencies": {
+        "@babel/preset-env": "^7.10.2",
+        "@babel/preset-react": "^7.10.1",
+        "babel": "^6.23.0",
+        "ink": "^2.7.1",
+        "keypress": "^0.2.1",
+        "react": "^16.13.1"
+    },
+    "babel": {
+        "presets": [
+            "@babel/preset-react",
+            [
+                "@babel/preset-env",
+                {
+                    "targets": {
+                        "node": true
+                    }
+                }
+            ]
+        ]
+    },
+    "devDependencies": {
+        "@babel/core": "^7.10.2",
+        "@babel/node": "^7.10.1"
+    }
+}
