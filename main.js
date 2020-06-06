@@ -3,6 +3,9 @@ import { render, Color } from "ink";
 import ResourceCount from "./components/GameUI"
 import dictionary from "./words_dictionary"
 import keypress from "keypress"
+import {writeFileSync} from "fs"
+
+import gameState from "./saveGame"
 
 const dictIndexes = Object.keys(dictionary)
 
@@ -10,16 +13,11 @@ process.stdin.setRawMode(true);
 process.stdin.resume();
 keypress(process.stdin);
 
-const gameState = {
-	count: 0,
-	currentWord: "",
-	typingState : "",
-
-}
 
 process.stdin.on('keypress', function (ch, key) {
   if (key && key.ctrl && key.name == 'c') {
     process.stdin.pause();
+    writeFileSync("saveGame.json", JSON.stringify(gameState))
     process.exit();
   }
   else if (key && key.name) {
