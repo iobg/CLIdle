@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { render, Color } from "ink";
-import ResourceCount from "./components/Counter"
+import ResourceCount from "./components/GameUI"
+import dictionary from "./words_dictionary"
 import keypress from "keypress"
 
 process.stdin.setRawMode(true);
@@ -9,9 +10,9 @@ keypress(process.stdin);
 
 const gameState = {
 	count: 0,
-	enterHeld: false,
-	enterPower: 1,
-	passiveInc: 0.1
+	currentWord: "password",
+	typingState : ""
+
 }
 
 process.stdin.on('keypress', function (ch, key) {
@@ -19,35 +20,50 @@ process.stdin.on('keypress', function (ch, key) {
     process.stdin.pause();
     process.exit();
   }
-
-  if (key && key.name == 'return') {
-   	handlePress()
+  else if (key && key.name) {
+  	if(key.shift){
+  		key.name  = key.name.toUpperCase();
+  	}
+  	handlePress(key.name)
   }
+
+
 
 });
 
-const handlePress = () => {
+const handlePress = (keyPressed) => {
 	//node can only check for keypress so... keep it from incrementing super fast when held
 	//flag gets cleared in main loop... maybe upgrades make it faster?
-	if(!gameState.enterHeld)
-		gameState.count += gameState.enterPower;
-	render(<ResourceCount count={gameState.count.toFixed(2)}/>)
-	gameState.enterHeld = true;
+	switch(keyPressed) {
+	  	case 'return':
+	  		gameState.typingState = ''
+	  		break;
+	  	case 'backspace':
+	  		gameState.typingState = gameState.typingState.substring(0, gameState.typingState.length-1)
+	  		break;
+	  	default:
+	  		if(keyPressed && keyPressed.length === 1){
+	  			gameState.typingState += keyPressed
+	  		}
+	  	break;
+	 }
+	update()
 }
 
 const update = () => {
-	gameState.enterHeld = false;
-	gameState.count += gameState.passiveInc;
-	render(<ResourceCount count={gameState.count.toFixed(2)}/>)
+	render(<ResourceCount 
+		currentWord={gameState.currentWord}
+		typingState = {gameState.typingState.padEnd(25, ' ')}
+	/>)
 }
 
 const init = ()=>{
 	console.clear()
-	render(<ResourceCount count={0}/>)
+	render(<ResourceCount 
+		currentWord={gameState.currentWord}
+		typingState = {gameState.typingState.padEnd(25, ' ')}
+	/>)
 }
 
-const mainLoop = setInterval(()=>{
-	update()
-}, 100)
 
 init();
