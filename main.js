@@ -4,14 +4,16 @@ import ResourceCount from "./components/GameUI"
 import dictionary from "./words_dictionary"
 import keypress from "keypress"
 
+const dictIndexes = Object.keys(dictionary)
+
 process.stdin.setRawMode(true);
 process.stdin.resume();
 keypress(process.stdin);
 
 const gameState = {
 	count: 0,
-	currentWord: "password",
-	typingState : ""
+	currentWord: "",
+	typingState : "",
 
 }
 
@@ -36,7 +38,7 @@ const handlePress = (keyPressed) => {
 	//flag gets cleared in main loop... maybe upgrades make it faster?
 	switch(keyPressed) {
 	  	case 'return':
-	  		gameState.typingState = ''
+	  		checkMatch()
 	  		break;
 	  	case 'backspace':
 	  		gameState.typingState = gameState.typingState.substring(0, gameState.typingState.length-1)
@@ -52,17 +54,30 @@ const handlePress = (keyPressed) => {
 
 const update = () => {
 	render(<ResourceCount 
+		count = {gameState.count}
 		currentWord={gameState.currentWord}
-		typingState = {gameState.typingState.padEnd(25, ' ')}
+		typingState = {gameState.typingState.padEnd(50, ' ')}
 	/>)
+}
+
+const checkMatch = () => {
+	if(gameState.currentWord === gameState.typingState){
+		gameState.count++
+		gameState.typingState = ""
+		getRandomWord()
+	}
+}
+
+const getRandomWord = () => {
+	let randomIndex = Math.floor(Math.random() * dictIndexes.length)
+	gameState.currentWord = dictIndexes[randomIndex]
+	
 }
 
 const init = ()=>{
 	console.clear()
-	render(<ResourceCount 
-		currentWord={gameState.currentWord}
-		typingState = {gameState.typingState.padEnd(25, ' ')}
-	/>)
+	getRandomWord()
+	update()
 }
 
 

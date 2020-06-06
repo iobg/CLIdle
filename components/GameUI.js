@@ -16,12 +16,16 @@ class TextBox extends Component {
     render() {
         return (
         <div>
-            <Box paddingLeft = {2}>
+            <Box>
                 <Color green>Type the word: {this.props.currentWord} </Color> 
+                <Box paddingLeft = {20}>
+                    <Color yellow >Words: {this.props.count}</Color> 
+                </Box>
             </Box>
-            <Box paddingLeft = {2} paddingTop = {20}>
+            <Box paddingLeft = {2} paddingTop = {18}>
                 <Color red>|{this.props.typingState}|</Color> 
             </Box>
+
         </div>
         )
 
